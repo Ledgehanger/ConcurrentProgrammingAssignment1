@@ -116,10 +116,9 @@ class SparseMatrixCOO extends SparseMatrix {
         //    the contribution to the new PageRank value of a destination
         //    vertex made by the corresponding source vertex
         for(int i =0; i<num_vertices; i++) {
-            for (int j = 0; j<num_vertices; j++) {
-                if(outdeg[j] != 0)
-                    out[i] += a * (in[j] / outdeg[j]);
-            }
+                if(outdeg[i] != 0)
+                    out[i] += a * (in[i] / outdeg[i]);
+
         }
     }
 }
@@ -196,12 +195,10 @@ class SparseMatrixCOO extends SparseMatrix {
         //    the contribution to the new PageRank value of a destination
         //    vertex made by the corresponding source vertex
         for(int i =0; i<num_vertices; i++) {
-            for (int j = 0; j<num_vertices; j++) {
-                if(outdeg_unused[j] != 0)
-                    out[i] += a * (in[j] / outdeg_unused[j]);
-            }
-        }
+            if(outdeg_unused[i] != 0)
+                out[i] += a * (in[i] / outdeg_unused[i]);
 
+        }
     }
 }
 
@@ -279,10 +276,9 @@ class SparseMatrixCSC extends SparseMatrix {
         //    the contribution to the new PageRank value of a destination
         //    vertex made by the corresponding source vertex
         for(int i =0; i<num_vertices; i++) {
-            for (int j = 0; j<num_vertices; j++) {
-                if(outdeg[j] != 0)
-                    out[i] += a * (in[j] / outdeg[j]);
-            }
+            if(outdeg[i] != 0)
+                out[i] += a * (in[i] / outdeg[i]);
+
         }
 	
     }
