@@ -37,7 +37,8 @@ abstract class SparseMatrix {
 // in coordinate format (COO)
 class SparseMatrixCOO extends SparseMatrix {
     // TODO: variable declarations
-    ...
+    int [] source;
+    int [] destination;
 
     SparseMatrixCOO( String file ) {
         try {
@@ -84,14 +85,16 @@ class SparseMatrixCOO extends SparseMatrix {
         num_edges = getNext(rd);
 
         // TODO: Allocate memory for the COO representation
-	...
+        source = new int[num_edges];
+	    destination = new int[num_edges];
 
         int edge[] = new int[2];
         for( int i=0; i < num_edges; ++i ) {
             getNextPair( rd, edge );
             // TODO:
             //    Insert edge with source edge[0] and destination edge[1]
-	    ...
+            source[i] = edge[0];
+            destination[i] = edge[1];
         }
     }
 
@@ -100,7 +103,11 @@ class SparseMatrixCOO extends SparseMatrix {
         // TODO:
         //    Calculate the out-degree for every vertex, i.e., the
         //    number of edges where a vertex appears as a source vertex.
-	...
+        for(int i=0; i<num_edges; i++){
+            outdeg[source[i]]++;
+        }
+
+	
     }
 
     void iterate( double a, double[] in, double[] out, int outdeg[] ) {
@@ -108,16 +115,19 @@ class SparseMatrixCOO extends SparseMatrix {
         //    Iterate over all edges in the sparse matrix and calculate
         //    the contribution to the new PageRank value of a destination
         //    vertex made by the corresponding source vertex
-	...
+        for(int i =0; i<num_vertices; i++) {
+            for (int j = 0; j<num_vertices; j++) {
+                if(outdeg[j] != 0)
+                    out[i] += a * (in[j] / outdeg[j]);
+            }
+        }
     }
 }
 
 // This class represents the adjacency matrix of a graph as a sparse matrix
 // in compressed sparse rows format (CSR), where a row index corresponds to
-// a source vertex and a column index corresponds to a destination
-class SparseMatrixCSR extends SparseMatrix {
+  class SparseMatrixCSR extends SparseMatrix {
     // TODO: variable declarations
-    ...
 
     SparseMatrixCSR( String file ) {
         try {
@@ -155,7 +165,7 @@ class SparseMatrixCSR extends SparseMatrix {
         num_edges = getNext(rd);
 
         // TODO: Allocate memory for the CSR representation
-	...
+	
 
         for( int i=0; i < num_vertices; ++i ) {
             line = rd.readLine();
@@ -167,7 +177,7 @@ class SparseMatrixCSR extends SparseMatrix {
                 int dst = Integer.parseInt( elm[j] );
                 // TODO:
                 //    Record an edge from source i to destination dst
-		...
+		
             }
         }
     }
@@ -177,7 +187,7 @@ class SparseMatrixCSR extends SparseMatrix {
         // TODO:
         //    Calculate the out-degree for every vertex, i.e., the
         //    number of edges where a vertex appears as a source vertex.
-	...
+	
     }
 
     void iterate( double a, double[] in, double[] out, int outdeg_unused[] ) {
@@ -185,7 +195,13 @@ class SparseMatrixCSR extends SparseMatrix {
         //    Iterate over all edges in the sparse matrix and calculate
         //    the contribution to the new PageRank value of a destination
         //    vertex made by the corresponding source vertex
-	...
+        for(int i =0; i<num_vertices; i++) {
+            for (int j = 0; j<num_vertices; j++) {
+                if(outdeg_unused[j] != 0)
+                    out[i] += a * (in[j] / outdeg_unused[j]);
+            }
+        }
+
     }
 }
 
@@ -194,7 +210,7 @@ class SparseMatrixCSR extends SparseMatrix {
 // vertex are listed.
 class SparseMatrixCSC extends SparseMatrix {
     // TODO: variable declarations
-    ...
+    
 
     SparseMatrixCSC( String file ) {
         try {
@@ -232,7 +248,7 @@ class SparseMatrixCSC extends SparseMatrix {
         num_edges = getNext(rd);
 
         // TODO: allocate data structures
-	...
+	
 
         for( int i=0; i < num_vertices; ++i ) {
             line = rd.readLine();
@@ -244,7 +260,7 @@ class SparseMatrixCSC extends SparseMatrix {
                 int src = Integer.parseInt( elm[j] );
                 // TODO:
                 //    Record an edge from source src to destination i
-		...
+		
             }
         }
     }
@@ -254,7 +270,7 @@ class SparseMatrixCSC extends SparseMatrix {
         // TODO:
         //    Calculate the out-degree for every vertex, i.e., the
         //    number of edges where a vertex appears as a source vertex.
-	...
+	
     }
 
     void iterate( double a, double[] in, double[] out, int outdeg[] ) {
@@ -262,7 +278,13 @@ class SparseMatrixCSC extends SparseMatrix {
         //    Iterate over all edges in the sparse matrix and calculate
         //    the contribution to the new PageRank value of a destination
         //    vertex made by the corresponding source vertex
-	...
+        for(int i =0; i<num_vertices; i++) {
+            for (int j = 0; j<num_vertices; j++) {
+                if(outdeg[j] != 0)
+                    out[i] += a * (in[j] / outdeg[j]);
+            }
+        }
+	
     }
 }
 
