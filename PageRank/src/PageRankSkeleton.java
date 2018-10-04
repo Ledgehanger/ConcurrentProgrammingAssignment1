@@ -1,6 +1,7 @@
 /*
  * Use command-line flag -ea for java VM to enable assertions.
  */
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.lang.Long;
 import java.lang.Integer;
 import java.io.File;
@@ -106,8 +107,6 @@ class SparseMatrixCOO extends SparseMatrix {
         for(int i=0; i<num_edges; i++){
             outdeg[source[i]]++;
         }
-
-	
     }
 
     void iterate( double a, double[] in, double[] out, int outdeg[] ) {
@@ -116,8 +115,16 @@ class SparseMatrixCOO extends SparseMatrix {
         //    the contribution to the new PageRank value of a destination
         //    vertex made by the corresponding source vertex
         for(int i =0; i<num_vertices; i++) {
-                if(outdeg[i] != 0)
-                    out[i] += a * (in[i] / outdeg[i]);
+            if(outdeg[i] != 0) {
+                for (int j = 0; j < outdeg[i]; j++) {
+                    if(outdeg[j] != 0)
+                        out[i] += a * (in[j] / outdeg[j]);
+                    else
+                        out[i] += a * in[j];
+                }
+            }
+            else
+                out[i] = a * in[i];
 
         }
     }
@@ -127,6 +134,7 @@ class SparseMatrixCOO extends SparseMatrix {
 // in compressed sparse rows format (CSR), where a row index corresponds to
   class SparseMatrixCSR extends SparseMatrix {
     // TODO: variable declarations
+    int [] source;
 
     SparseMatrixCSR( String file ) {
         try {
@@ -164,6 +172,7 @@ class SparseMatrixCOO extends SparseMatrix {
         num_edges = getNext(rd);
 
         // TODO: Allocate memory for the CSR representation
+        source = new int [num_vertices];
 	
 
         for( int i=0; i < num_vertices; ++i ) {
@@ -176,6 +185,7 @@ class SparseMatrixCOO extends SparseMatrix {
                 int dst = Integer.parseInt( elm[j] );
                 // TODO:
                 //    Record an edge from source i to destination dst
+
 		
             }
         }
