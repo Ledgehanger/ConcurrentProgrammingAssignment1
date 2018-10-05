@@ -1,4 +1,4 @@
-/*
+    /*
  * Use command-line flag -ea for java VM to enable assertions.
  */
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
@@ -114,18 +114,13 @@ class SparseMatrixCOO extends SparseMatrix {
         //    Iterate over all edges in the sparse matrix and calculate
         //    the contribution to the new PageRank value of a destination
         //    vertex made by the corresponding source vertex
-        for(int i =0; i<num_vertices; i++) {
-            if(outdeg[i] != 0) {
-                for (int j = 0; j < outdeg[i]; j++) {
-                    if(outdeg[j] != 0)
-                        out[i] += a * (in[j] / outdeg[j]);
-                    else
-                        out[i] += a * in[j];
-                }
+        for(int i =0; i<num_edges; i++) {
+            if(outdeg[destination[i]] != 0) {
+                out[source[i]] += a * in[destination[i]] / outdeg[destination[i]];
             }
-            else
-                out[i] = a * in[i];
-
+            else{
+                out[source[i]] += a * in[destination[i]];
+            }
         }
     }
 }
@@ -135,6 +130,7 @@ class SparseMatrixCOO extends SparseMatrix {
   class SparseMatrixCSR extends SparseMatrix {
     // TODO: variable declarations
     int [] source;
+    int [] destination;
 
     SparseMatrixCSR( String file ) {
         try {
@@ -173,7 +169,7 @@ class SparseMatrixCOO extends SparseMatrix {
 
         // TODO: Allocate memory for the CSR representation
         source = new int [num_vertices];
-	
+        destination = new int [num_vertices];
 
         for( int i=0; i < num_vertices; ++i ) {
             line = rd.readLine();
@@ -217,7 +213,8 @@ class SparseMatrixCOO extends SparseMatrix {
 // vertex are listed.
 class SparseMatrixCSC extends SparseMatrix {
     // TODO: variable declarations
-    
+    int [] source;
+    int [] destination;
 
     SparseMatrixCSC( String file ) {
         try {
@@ -255,7 +252,8 @@ class SparseMatrixCSC extends SparseMatrix {
         num_edges = getNext(rd);
 
         // TODO: allocate data structures
-	
+	    source = new int[num_vertices];
+	    destination = new int[num_vertices];
 
         for( int i=0; i < num_vertices; ++i ) {
             line = rd.readLine();
