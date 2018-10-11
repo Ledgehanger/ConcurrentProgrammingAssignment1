@@ -187,9 +187,12 @@
         }
 
         void iterate(double a, double[] in, double[] out, int outdeg_unused[]) {
+            int outdeg = 0;
             for (int i = 0; i < num_vertices; i++) {
                 for (int j = source[i]; j < source[i + 1]; j++) {
-                    out[i] += a * (in[destination[j]] / (source[destination[j] + 1] - source[destination[j]]));
+                    outdeg = source[i+1] - source[i];
+                    out[destination[j]] += a * (in[i] / outdeg);
+
                 }
             }
         }
